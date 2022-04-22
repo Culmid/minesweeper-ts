@@ -108,6 +108,59 @@ html {
 /* Game Content */
 .game-content {
   background-color: aquamarine;
-  height: 500px;
-  width: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+.game-row {
+  display: flex;
+}
+
+.game-cell {
+  height: 50px;
+  width: 50px;
+  background-color: rgb(162, 209, 73);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 400px;
+  font-size: 30px;
+}
+
+.game-row:nth-of-type(odd) .game-cell:nth-of-type(odd),
+.game-row:nth-of-type(even) .game-cell:nth-of-type(even) {
+  background-color: rgb(170, 215, 81);
+}
+
+.game-cell.open {
+  background-color: rgb(215, 184, 154);
+}
+
+.game-row:nth-of-type(odd) .game-cell:nth-of-type(odd).open,
+.game-row:nth-of-type(even) .game-cell:nth-of-type(even).open {
+  background-color: rgb(229, 194, 159);
+}
+
+.game-cell:hover {
+  filter: brightness(125%);
+}
+
+.one {
+  color: rgb(25, 118, 210);
+}
+
+.two {
+  color: rgb(56, 142, 59);
+}
+
+.three {
+  color: rgb(211, 47, 46);
+}
+
+.four {
+  color: rgb(123, 31, 162);
+}
+
+.five {
+  color: rgb(255, 143, 2);
 }
