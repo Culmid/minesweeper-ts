@@ -1,0 +1,113 @@
+body,
+html {
+  margin: 0;
+  height: 100vh;
+  background-color: blue;
+  font-family: "Open Sans", sans-serif;
+}
+
+.page-wrapper {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+}
+
+/* Let Game Content Stretch */
+.game-wrapper {
+  background-color: white;
+  border-radius: 10px;
+  padding: 5px;
+}
+
+/* Header */
+.game-header {
+  background-color: #4a752c;
+  height: 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.game-header-dropdown {
+  position: relative;
+}
+
+.game-header-dropdown-button {
+  border: none;
+  padding: 5px;
+  height: 30px;
+  width: 120px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  background-color: white;
+  font-size: 15px;
+  font-weight: 700;
+  border-radius: 5px;
+}
+
+.game-header-dropdown-list {
+  position: absolute;
+  top: 30px;
+  left: 0;
+  background-color: white;
+  width: 120px;
+  border-radius: 5px;
+  box-shadow: 0 0 15px black;
+  display: none;
+}
+
+.game-header-dropdown-list-entry {
+  font-size: 15px;
+  font-weight: 700;
+  padding: 5px;
+  margin: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.game-header-dropdown-list-entry img {
+  margin-right: 5px;
+}
+
+.not-selected {
+  padding-left: 30px;
+}
+
+.header-item {
+  display: flex;
+  align-items: center;
+  background-color: lightcyan;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.header-item img {
+  margin-right: 10px;
+}
+
+.header-item-text {
+  background-color: lightgray;
+  padding: 5px;
+  border-radius: 5px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Game Content */
+.game-content {
+  background-color: aquamarine;
+  height: 500px;
+  width: 500px;
+}
