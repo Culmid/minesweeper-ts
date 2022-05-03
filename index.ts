@@ -1,3 +1,5 @@
+let GAME_SIZE: 10 | 15 | 20 = 10;
+
 function renderPage() {
   const pageWrapper: HTMLDivElement = document.createElement("div");
   pageWrapper.classList.add("page-wrapper");
@@ -25,6 +27,25 @@ function renderPage() {
   gameHeader.appendChild(
     headerItem("./assets/images/clock-solid.svg", "Clock", ["00", "00", "00"])
   );
+
+  // CONTENT
+  const gameContent: HTMLDivElement = document.createElement("div");
+  gameContent.classList.add("game-content");
+  gameWrapper.appendChild(gameContent);
+
+  for (let y = 0; y < GAME_SIZE; y++) {
+    const gameRow: HTMLDivElement = document.createElement("div");
+    gameRow.classList.add("game-row");
+    gameContent.appendChild(gameRow);
+
+    for (let x = 0; x < GAME_SIZE; x++) {
+      const gameCell: HTMLDivElement = document.createElement("div");
+      gameCell.classList.add("game-cell");
+      gameCell.setAttribute("x", `${x}`);
+      gameCell.setAttribute("y", `${y}`);
+      gameRow.appendChild(gameCell);
+    }
+  }
 }
 
 function gameHeaderDropdown(options: string[], name: string): HTMLDivElement {

@@ -13,7 +13,6 @@ body,
 html {
   margin: 0;
   height: 100vh;
-  background-color: blue;
   font-family: "Open Sans", sans-serif;
 }
 
@@ -70,7 +69,7 @@ html {
   width: 120px;
   border-radius: 5px;
   box-shadow: 0 0 15px black;
-  display: none;
+  /* display: none; */
 }
 
 .game-header-dropdown-list-entry {
