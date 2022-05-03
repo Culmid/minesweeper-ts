@@ -1,3 +1,14 @@
+:root {
+  --spring-dark: rgb(162, 209, 73);
+  --spring-light: rgb(170, 215, 81);
+  --summer-dark: rgb(255, 218, 0);
+  --summer-light: rgb(255, 232, 0);
+  --autumn-dark: rgb(197, 60, 9);
+  --autumn-light: rgb(250, 111, 4);
+  --winter-dark: rgb(35, 119, 164);
+  --winter-light: rgb(80, 163, 198);
+}
+
 body,
 html {
   margin: 0;
@@ -119,7 +130,7 @@ html {
 .game-cell {
   height: 50px;
   width: 50px;
-  background-color: rgb(162, 209, 73);
+  background-color: var(--spring-dark);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -129,7 +140,7 @@ html {
 
 .game-row:nth-of-type(odd) .game-cell:nth-of-type(odd),
 .game-row:nth-of-type(even) .game-cell:nth-of-type(even) {
-  background-color: rgb(170, 215, 81);
+  background-color: var(--spring-light);
 }
 
 .game-cell.open {
