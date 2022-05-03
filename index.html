@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Minesweeper</title>
+    <link rel="stylesheet" href="assets/styles/styles.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="page-wrapper">
+      <div class="game-wrapper">
+        <div class="game-header">
+          <div class="game-header-dropdown">
+            <button class="game-header-dropdown-button" id="change-size">
+              Small
+              <img
+                src="./assets/images/angle-down-solid.svg"
+                alt="Down"
+                width="10px"
+                height="10px"
+              />
+            </button>
+            <div class="game-header-dropdown-list" id="size-list">
+              <button class="game-header-dropdown-list-entry" id="small">
+                <img
+                  src="./assets/images/check-solid.svg"
+                  alt="Tick"
+                  height="20px"
+                  width="20px"
+                />
+                Small
+              </button>
+              <button
+                class="game-header-dropdown-list-entry not-selected"
+                id="medium"
+              >
+                Medium
+              </button>
+              <button
+                class="game-header-dropdown-list-entry not-selected"
+                id="large"
+              >
+                Large
+              </button>
+            </div>
+          </div>
+          <div class="game-header-dropdown">
+            <button class="game-header-dropdown-button" id="change-theme">
+              Spring
+              <img
+                src="./assets/images/angle-down-solid.svg"
+                alt="Down"
+                width="10px"
+                height="10px"
+              />
+            </button>
+            <div class="game-header-dropdown-list" id="theme-list">
+              <button class="game-header-dropdown-list-entry" id="spring">
+                <img
+                  src="./assets/images/check-solid.svg"
+                  alt="Tick"
+                  height="20px"
+                  width="20px"
+                />
+                Spring
+              </button>
+              <button
+                class="game-header-dropdown-list-entry not-selected"
+                id="summer"
+              >
+                Summer
+              </button>
+              <button
+                class="game-header-dropdown-list-entry not-selected"
+                id="autumn"
+              >
+                Autumn
+              </button>
+              <button
+                class="game-header-dropdown-list-entry not-selected"
+                id="autumn"
+              >
+                Winter
+              </button>
+            </div>
+          </div>
+          <div class="header-item">
+            <img
+              src="./assets/images/flag-solid.svg"
+              alt="Flag"
+              width="30px"
+              height="30px"
+            />
+            <div class="header-item-text" id="flag-count">100</div>
+          </div>
+          <div class="header-item">
+            <img
+              src="./assets/images/clock-solid.svg"
+              alt="Flag"
+              width="30px"
+              height="30px"
+            />
+            <div class="header-item-text" id="flag-count">
+              <span id="min">00</span>
+              :
+              <span id="sec">00</span>
+              .
+              <span id="ms">00</span>
+            </div>
+          </div>
+        </div>
+        <div class="game-content">
+          <div class="game-row">
+            <div class="game-cell open one">1</div>
+            <div class="game-cell open two">2</div>
+            <div class="game-cell open three">3</div>
+            <div class="game-cell open four">4</div>
+            <div class="game-cell open five">5</div>
+            <div class="game-cell open six">6</div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+          </div>
+          <div class="game-row">
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+          </div>
+          <div class="game-row">
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+          </div>
+          <div class="game-row">
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+          </div>
+          <div class="game-row">
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+          </div>
+          <div class="game-row">
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+          </div>
+          <div class="game-row">
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+          </div>
+          <div class="game-row">
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+          </div>
+          <div class="game-row">
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+          </div>
+          <div class="game-row">
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+            <div class="game-cell"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
