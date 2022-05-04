@@ -199,6 +199,7 @@ function resetGameContent() {
     "game-content"
   ) as HTMLDivElement;
   gameContent.innerHTML = "";
+  gameContent.setAttribute("theme", keys["active-theme"]);
   let gameSize = translateSize[keys["active-size"]];
 
   for (let y = 0; y < gameSize; y++) {
