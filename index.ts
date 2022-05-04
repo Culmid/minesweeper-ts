@@ -1,20 +1,13 @@
-type keyObject = {
-  [key: string]: string;
-};
-
-interface sizeMap {
-  [sizeText: string]: number;
-}
-
-let keys: keyObject = {
+let keys = {
   "active-size": "small",
   "active-theme": "spring",
+  "remaining-bombs": 25,
 };
 
-const translateSize: sizeMap = {
-  small: 10,
-  medium: 15,
-  large: 20,
+const translateSize = {
+  small: [10, 25],
+  medium: [15, 50],
+  large: [20, 100],
 };
 
 function renderPage() {
@@ -200,8 +193,8 @@ function resetGameContent() {
   ) as HTMLDivElement;
   gameContent.innerHTML = "";
   gameContent.setAttribute("theme", keys["active-theme"]);
-  let gameSize = translateSize[keys["active-size"]];
 
+  let gameSize = translateSize[keys["active-size"]][0];
   for (let y = 0; y < gameSize; y++) {
     const gameRow: HTMLDivElement = document.createElement("div");
     gameRow.classList.add("game-row");
@@ -215,6 +208,13 @@ function resetGameContent() {
       gameRow.appendChild(gameCell);
     }
   }
+
+  // Handle Remaining Bombs
+  keys["remaining-bombs"] = translateSize[keys["active-size"]][1];
+  const flagCount: HTMLDivElement = document.getElementById(
+    "flag-count"
+  ) as HTMLDivElement;
+  flagCount.innerHTML = keys["remaining-bombs"].toString();
 }
 
 renderPage();
