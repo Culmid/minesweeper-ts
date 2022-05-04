@@ -1,4 +1,12 @@
+type keyObject = {
+  [index: string]: string;
+};
+
 let GAME_SIZE: 10 | 15 | 20 = 10;
+let keys: keyObject = {
+  "active-size": "small",
+  "active-theme": "spring",
+};
 
 function renderPage() {
   const pageWrapper: HTMLDivElement = document.createElement("div");
@@ -89,6 +97,26 @@ function gameHeaderDropdown(options: string[], name: string): HTMLDivElement {
 
     listEntry.append(option);
     dropdownList.appendChild(listEntry);
+
+    listEntry.addEventListener("click", () => {
+      // Update Button
+      keys[`active-${name}`] = listEntry.id;
+      dropdownButton.firstChild.textContent = option;
+
+      // Update List
+      updateList(dropdownList, name);
+    });
+  });
+
+  dropdownButton.addEventListener("click", () => {
+    if (dropdownList.style.display === "inline") {
+      dropdownList.style.display = "none";
+      dropdownImg.style.transform = "none";
+    } else {
+      updateList(dropdownList, name);
+      dropdownList.style.display = "inline";
+      dropdownImg.style.transform = "rotate(180deg)";
+    }
   });
 
   return dropdown;
@@ -138,6 +166,31 @@ function headerItem(
   }
 
   return item;
+}
+
+function updateList(dropdownList: HTMLDivElement, name: string) {
+  const listChildren: Element[] = Array.from(dropdownList.children);
+  listChildren.forEach((element) => {
+    if (
+      element.id === keys[`active-${name}`] &&
+      element.children.length === 0
+    ) {
+      const checkImg: HTMLImageElement = document.createElement("img");
+      checkImg.src = "./assets/images/check-solid.svg";
+      checkImg.alt = "Tick";
+      checkImg.style.height = "20px";
+      checkImg.style.width = "20px";
+
+      element.prepend(checkImg);
+      element.classList.remove("not-selected");
+    } else if (
+      element.id !== keys[`active-${name}`] &&
+      element.children.length > 0
+    ) {
+      element.classList.add("not-selected");
+      element.removeChild(element.firstChild);
+    }
+  });
 }
 
 renderPage();
