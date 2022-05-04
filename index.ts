@@ -1,11 +1,20 @@
 type keyObject = {
-  [index: string]: string;
+  [key: string]: string;
 };
 
-let GAME_SIZE: 10 | 15 | 20 = 10;
+interface sizeMap {
+  [sizeText: string]: number;
+}
+
 let keys: keyObject = {
   "active-size": "small",
   "active-theme": "spring",
+};
+
+const translateSize: sizeMap = {
+  small: 10,
+  medium: 15,
+  large: 20,
 };
 
 function renderPage() {
@@ -39,21 +48,10 @@ function renderPage() {
   // CONTENT
   const gameContent: HTMLDivElement = document.createElement("div");
   gameContent.classList.add("game-content");
+  gameContent.id = "game-content";
   gameWrapper.appendChild(gameContent);
 
-  for (let y = 0; y < GAME_SIZE; y++) {
-    const gameRow: HTMLDivElement = document.createElement("div");
-    gameRow.classList.add("game-row");
-    gameContent.appendChild(gameRow);
-
-    for (let x = 0; x < GAME_SIZE; x++) {
-      const gameCell: HTMLDivElement = document.createElement("div");
-      gameCell.classList.add("game-cell");
-      gameCell.setAttribute("x", `${x}`);
-      gameCell.setAttribute("y", `${y}`);
-      gameRow.appendChild(gameCell);
-    }
-  }
+  resetGameContent();
 }
 
 function gameHeaderDropdown(options: string[], name: string): HTMLDivElement {
@@ -105,6 +103,9 @@ function gameHeaderDropdown(options: string[], name: string): HTMLDivElement {
 
       // Update List
       updateList(dropdownList, name);
+
+      // Update Board
+      resetGameContent();
     });
   });
 
@@ -169,7 +170,7 @@ function headerItem(
 }
 
 function updateList(dropdownList: HTMLDivElement, name: string) {
-  const listChildren: Element[] = Array.from(dropdownList.children);
+  const listChildren = [...dropdownList.children];
   listChildren.forEach((element) => {
     if (
       element.id === keys[`active-${name}`] &&
@@ -191,6 +192,28 @@ function updateList(dropdownList: HTMLDivElement, name: string) {
       element.removeChild(element.firstChild);
     }
   });
+}
+
+function resetGameContent() {
+  const gameContent: HTMLDivElement = document.getElementById(
+    "game-content"
+  ) as HTMLDivElement;
+  gameContent.innerHTML = "";
+  let gameSize = translateSize[keys["active-size"]];
+
+  for (let y = 0; y < gameSize; y++) {
+    const gameRow: HTMLDivElement = document.createElement("div");
+    gameRow.classList.add("game-row");
+    gameContent.appendChild(gameRow);
+
+    for (let x = 0; x < gameSize; x++) {
+      const gameCell: HTMLDivElement = document.createElement("div");
+      gameCell.classList.add("game-cell");
+      gameCell.setAttribute("x", `${x}`);
+      gameCell.setAttribute("y", `${y}`);
+      gameRow.appendChild(gameCell);
+    }
+  }
 }
 
 renderPage();
