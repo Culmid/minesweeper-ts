@@ -1,7 +1,7 @@
 let keys = {
   "active-size": "small",
   "active-theme": "spring",
-  "remaining-bombs": 25,
+  "remaining-flags": 25,
 };
 
 const translateSize = {
@@ -210,11 +210,11 @@ function resetGameContent() {
   }
 
   // Handle Remaining Bombs
-  keys["remaining-bombs"] = translateSize[keys["active-size"]][1];
+  keys["remaining-flags"] = translateSize[keys["active-size"]][1];
   const flagCount: HTMLDivElement = document.getElementById(
     "flag-count"
   ) as HTMLDivElement;
-  flagCount.innerHTML = keys["remaining-bombs"].toString();
+  flagCount.innerHTML = keys["remaining-flags"].toString();
 }
 
 renderPage();
