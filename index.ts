@@ -273,6 +273,31 @@ function resetGameContent() {
 
           keys["remaining-flags"]--;
           flagCount.innerHTML = keys["remaining-flags"].toString();
+
+          if (keys["remaining-flags"] == 0) {
+            // Check all bombs covered
+            if (allBombsCovered(gameSize)) {
+              banner(
+                `SUCCESS!`,
+                `Time: ${currentTime[1] < 10 ? "0" : ""}${currentTime[1]}:${
+                  currentTime[0] < 10 ? "0" : ""
+                }${currentTime[0] % 60}`
+              );
+            }
+          }
+
+          // Start Timer
+          if (keys["game-state"] === "ready") {
+            keys["game-state"] = "playing";
+
+            secInterval = setInterval(() => {
+              updateSec();
+            }, 1000);
+
+            minInterval = setInterval(() => {
+              updateMin();
+            }, 60000);
+          }
         } else {
           const firstChild: HTMLImageElement =
             cell.firstElementChild as HTMLImageElement;
@@ -347,6 +372,8 @@ function resetGameContent() {
       }
     }
   }
+
+  console.log(gameState);
 }
 
 function updateMin() {
@@ -377,7 +404,7 @@ function updateSec() {
   sec.append((currentTime[0] % 60).toString());
 }
 
-function banner(text: string) {
+function banner(text: string, overflowText: string = null) {
   const container: HTMLDivElement = document.createElement("div");
   container.classList.add("banner-container");
   document.getElementById("game-wrapper").appendChild(container);
@@ -386,6 +413,12 @@ function banner(text: string) {
   banner.classList.add("banner");
   banner.innerHTML = text;
   container.appendChild(banner);
+
+  if (overflowText) {
+    const overflowDiv: HTMLDivElement = document.createElement("div");
+    overflowDiv.innerHTML = overflowText;
+    banner.appendChild(overflowDiv);
+  }
 
   const restartButton: HTMLButtonElement = document.createElement("button");
   restartButton.classList.add("restart");
@@ -402,6 +435,24 @@ function banner(text: string) {
   restartButton.addEventListener("click", () => {
     document.location.reload();
   });
+}
+
+function allBombsCovered(gameSize: number) {
+  for (let y = 0; y < gameSize; y++) {
+    for (let x = 0; x < gameSize; x++) {
+      if (gameState[y][x] == -1) {
+        const testCell: HTMLDivElement = document.querySelector(
+          `div[x=\"${x}\"][y=\"${y}\"]`
+        );
+
+        if (testCell.innerHTML === "") {
+          return false;
+        }
+      }
+    }
+  }
+
+  return true;
 }
 
 renderPage();
