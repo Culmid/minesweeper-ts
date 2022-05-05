@@ -10,6 +10,15 @@ const translateSize = {
   large: [20, 100],
 };
 
+const numberMap = {
+  1: "one",
+  2: "two",
+  3: "three",
+  4: "four",
+  5: "five",
+  6: "six",
+};
+
 let gameState: number[][] = [];
 
 function renderPage() {
@@ -208,6 +217,7 @@ function resetGameContent() {
       gameCell.classList.add("game-cell");
       gameCell.setAttribute("x", `${x}`);
       gameCell.setAttribute("y", `${y}`);
+      gameCell.setAttribute(keys["active-size"], "");
       gameRow.appendChild(gameCell);
     }
   }
@@ -246,12 +256,12 @@ function resetGameContent() {
       );
 
       cell.addEventListener("contextmenu", () => {
-        if (cell.innerHTML === "") {
+        if (cell.innerHTML === "" && !cell.classList.contains("open")) {
           const flagImg: HTMLImageElement = document.createElement("img");
           flagImg.src = "./assets/images/flag-solid.svg";
           flagImg.alt = "Flag";
-          flagImg.style.height = "40px";
-          flagImg.style.width = "40px";
+          flagImg.style.height = "80%";
+          flagImg.style.width = "80%";
           cell.appendChild(flagImg);
 
           keys["remaining-flags"]--;
@@ -286,17 +296,26 @@ function resetGameContent() {
             }
           }
         }
+
+        cell.addEventListener("click", () => {
+          if (cell.innerHTML === "") {
+            cell.classList.add("open");
+            if (gameState[y][x] > 0) {
+              cell.classList.add(numberMap[gameState[y][x]]);
+              cell.innerHTML = gameState[y][x].toString();
+            }
+          }
+        });
       } else {
         cell.addEventListener("click", () => {
           if (cell.innerHTML === "") {
             cell.classList.add("open");
-            cell.innerHTML = "";
 
             const bombImg: HTMLImageElement = document.createElement("img");
             bombImg.src = "./assets/images/bomb-solid.svg";
             bombImg.alt = "Bomb";
-            bombImg.style.height = "40px";
-            bombImg.style.width = "40px";
+            bombImg.style.height = "80%";
+            bombImg.style.width = "80%";
             cell.appendChild(bombImg);
           }
         });

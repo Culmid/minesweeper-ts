@@ -145,6 +145,16 @@ html {
   font-size: 30px;
 }
 
+.game-cell[medium] {
+  height: 40px;
+  width: 40px;
+}
+
+.game-cell[large] {
+  height: 35px;
+  width: 35px;
+}
+
 .game-cell {
   background-color: var(--cell-dark);
 }
