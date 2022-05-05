@@ -2,6 +2,7 @@ let keys = {
   "active-size": "small",
   "active-theme": "spring",
   "remaining-flags": 25,
+  "game-state": "ready",
 };
 
 const translateSize = {
@@ -10,13 +11,31 @@ const translateSize = {
   large: [20, 100],
 };
 
+const numberMap = {
+  1: "one",
+  2: "two",
+  3: "three",
+  4: "four",
+  5: "five",
+  6: "six",
+};
+
+const currentTime: [number, number] = [0, 0];
+
+let minInterval: number;
+let secInterval: number;
+
+let gameState: number[][] = [];
+
 function renderPage() {
   const pageWrapper: HTMLDivElement = document.createElement("div");
   pageWrapper.classList.add("page-wrapper");
   document.body.appendChild(pageWrapper);
+  document.body.setAttribute("oncontextmenu", "return false;");
 
   const gameWrapper: HTMLDivElement = document.createElement("div");
   gameWrapper.classList.add("game-wrapper");
+  gameWrapper.id = "game-wrapper";
   pageWrapper.appendChild(gameWrapper);
 
   // HEADER
@@ -205,6 +224,7 @@ function resetGameContent() {
       gameCell.classList.add("game-cell");
       gameCell.setAttribute("x", `${x}`);
       gameCell.setAttribute("y", `${y}`);
+      gameCell.setAttribute(keys["active-size"], "");
       gameRow.appendChild(gameCell);
     }
   }
@@ -215,6 +235,224 @@ function resetGameContent() {
     "flag-count"
   ) as HTMLDivElement;
   flagCount.innerHTML = keys["remaining-flags"].toString();
+
+  // Init Game State
+  const randomNos: number[] = [];
+  while (randomNos.length < keys["remaining-flags"]) {
+    const potentialNo: number = Math.floor(Math.random() * gameSize ** 2);
+
+    if (randomNos.indexOf(potentialNo) === -1) {
+      randomNos.push(potentialNo);
+    }
+  }
+
+  gameState = [];
+  for (let y = 0; y < gameSize; y++) {
+    const row: number[] = [];
+    for (let x = 0; x < gameSize; x++) {
+      row.push(randomNos.indexOf(gameSize * y + x) > -1 ? -1 : 0);
+    }
+
+    gameState.push(row);
+  }
+
+  for (let y = 0; y < gameSize; y++) {
+    for (let x = 0; x < gameSize; x++) {
+      const cell: HTMLDivElement = document.querySelector(
+        `div[x=\"${x}\"][y=\"${y}\"]`
+      );
+
+      cell.addEventListener("contextmenu", () => {
+        if (cell.innerHTML === "" && !cell.classList.contains("open")) {
+          const flagImg: HTMLImageElement = document.createElement("img");
+          flagImg.src = "./assets/images/flag-solid.svg";
+          flagImg.alt = "Flag";
+          flagImg.style.height = "80%";
+          flagImg.style.width = "80%";
+          cell.appendChild(flagImg);
+
+          keys["remaining-flags"]--;
+          flagCount.innerHTML = keys["remaining-flags"].toString();
+
+          if (keys["remaining-flags"] == 0) {
+            // Check all bombs covered
+            if (allBombsCovered(gameSize)) {
+              banner(
+                `SUCCESS!`,
+                `Time: ${currentTime[1] < 10 ? "0" : ""}${currentTime[1]}:${
+                  currentTime[0] < 10 ? "0" : ""
+                }${currentTime[0] % 60}`
+              );
+            }
+          }
+
+          // Start Timer
+          if (keys["game-state"] === "ready") {
+            keys["game-state"] = "playing";
+
+            secInterval = setInterval(() => {
+              updateSec();
+            }, 1000);
+
+            minInterval = setInterval(() => {
+              updateMin();
+            }, 60000);
+          }
+        } else {
+          const firstChild: HTMLImageElement =
+            cell.firstElementChild as HTMLImageElement;
+
+          if (
+            firstChild !== null &&
+            firstChild.src.includes("flag-solid.svg")
+          ) {
+            cell.innerHTML = "";
+            keys["remaining-flags"]++;
+            flagCount.innerHTML = keys["remaining-flags"].toString();
+          }
+        }
+      });
+
+      if (gameState[y][x] !== -1) {
+        for (let i = -1; i < 2; i++) {
+          for (let j = -1; j < 2; j++) {
+            if (
+              !(i === 0 && j === 0) &&
+              y + i > -1 &&
+              y + i < gameSize &&
+              x + j > -1 &&
+              x + j < gameSize &&
+              gameState[y + i][x + j] === -1
+            ) {
+              gameState[y][x]++;
+            }
+          }
+        }
+
+        cell.addEventListener("click", () => {
+          if (cell.innerHTML === "") {
+            cell.classList.add("open");
+            if (gameState[y][x] > 0) {
+              cell.classList.add(numberMap[gameState[y][x]]);
+              cell.innerHTML = gameState[y][x].toString();
+            }
+
+            // Start Timer
+            if (keys["game-state"] === "ready") {
+              keys["game-state"] = "playing";
+
+              secInterval = setInterval(() => {
+                updateSec();
+              }, 1000);
+
+              minInterval = setInterval(() => {
+                updateMin();
+              }, 60000);
+            }
+          }
+        });
+      } else {
+        cell.addEventListener("click", () => {
+          if (cell.innerHTML === "") {
+            cell.classList.add("open");
+
+            const bombImg: HTMLImageElement = document.createElement("img");
+            bombImg.src = "./assets/images/bomb-solid.svg";
+            bombImg.alt = "Bomb";
+            bombImg.style.height = "80%";
+            bombImg.style.width = "80%";
+            cell.appendChild(bombImg);
+
+            banner("GAME OVER");
+
+            clearInterval(minInterval);
+            clearInterval(secInterval);
+          }
+        });
+      }
+    }
+  }
+
+  console.log(gameState);
+}
+
+function updateMin() {
+  const min: HTMLSpanElement = document.getElementById(
+    "min"
+  ) as HTMLSpanElement;
+  min.innerHTML = "";
+  currentTime[1]++;
+
+  if (currentTime[1] < 10) {
+    min.append("0");
+  }
+
+  min.append(currentTime[1].toString());
+}
+
+function updateSec() {
+  const sec: HTMLSpanElement = document.getElementById(
+    "sec"
+  ) as HTMLSpanElement;
+  sec.innerHTML = "";
+  currentTime[0]++;
+
+  if (currentTime[0] % 60 < 10) {
+    sec.append("0");
+  }
+
+  sec.append((currentTime[0] % 60).toString());
+}
+
+function banner(text: string, overflowText: string = null) {
+  const container: HTMLDivElement = document.createElement("div");
+  container.classList.add("banner-container");
+  document.getElementById("game-wrapper").appendChild(container);
+
+  const banner: HTMLDivElement = document.createElement("div");
+  banner.classList.add("banner");
+  banner.innerHTML = text;
+  container.appendChild(banner);
+
+  if (overflowText) {
+    const overflowDiv: HTMLDivElement = document.createElement("div");
+    overflowDiv.innerHTML = overflowText;
+    banner.appendChild(overflowDiv);
+  }
+
+  const restartButton: HTMLButtonElement = document.createElement("button");
+  restartButton.classList.add("restart");
+  container.appendChild(restartButton);
+
+  const restartImg: HTMLImageElement = document.createElement("img");
+  restartImg.classList.add("restart-img");
+  restartImg.src = "./assets/images/arrow-rotate-left-solid.svg";
+  restartImg.alt = "Restart";
+  restartImg.style.width = "50px";
+  restartImg.style.height = "50px";
+  restartButton.appendChild(restartImg);
+
+  restartButton.addEventListener("click", () => {
+    document.location.reload();
+  });
+}
+
+function allBombsCovered(gameSize: number) {
+  for (let y = 0; y < gameSize; y++) {
+    for (let x = 0; x < gameSize; x++) {
+      if (gameState[y][x] == -1) {
+        const testCell: HTMLDivElement = document.querySelector(
+          `div[x=\"${x}\"][y=\"${y}\"]`
+        );
+
+        if (testCell.innerHTML === "") {
+          return false;
+        }
+      }
+    }
+  }
+
+  return true;
 }
 
 renderPage();
