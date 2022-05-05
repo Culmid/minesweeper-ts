@@ -10,10 +10,13 @@ const translateSize = {
   large: [20, 100],
 };
 
+let gameState: number[][] = [];
+
 function renderPage() {
   const pageWrapper: HTMLDivElement = document.createElement("div");
   pageWrapper.classList.add("page-wrapper");
   document.body.appendChild(pageWrapper);
+  document.body.setAttribute("oncontextmenu", "return false;");
 
   const gameWrapper: HTMLDivElement = document.createElement("div");
   gameWrapper.classList.add("game-wrapper");
@@ -215,6 +218,91 @@ function resetGameContent() {
     "flag-count"
   ) as HTMLDivElement;
   flagCount.innerHTML = keys["remaining-flags"].toString();
+
+  // Init Game State
+  const randomNos: number[] = [];
+  while (randomNos.length < keys["remaining-flags"]) {
+    const potentialNo: number = Math.floor(Math.random() * gameSize ** 2);
+
+    if (randomNos.indexOf(potentialNo) === -1) {
+      randomNos.push(potentialNo);
+    }
+  }
+
+  gameState = [];
+  for (let y = 0; y < gameSize; y++) {
+    const row: number[] = [];
+    for (let x = 0; x < gameSize; x++) {
+      row.push(randomNos.indexOf(gameSize * y + x) > -1 ? -1 : 0);
+    }
+
+    gameState.push(row);
+  }
+
+  for (let y = 0; y < gameSize; y++) {
+    for (let x = 0; x < gameSize; x++) {
+      const cell: HTMLDivElement = document.querySelector(
+        `div[x=\"${x}\"][y=\"${y}\"]`
+      );
+
+      cell.addEventListener("contextmenu", () => {
+        if (cell.innerHTML === "") {
+          const flagImg: HTMLImageElement = document.createElement("img");
+          flagImg.src = "./assets/images/flag-solid.svg";
+          flagImg.alt = "Flag";
+          flagImg.style.height = "40px";
+          flagImg.style.width = "40px";
+          cell.appendChild(flagImg);
+
+          keys["remaining-flags"]--;
+          flagCount.innerHTML = keys["remaining-flags"].toString();
+        } else {
+          const firstChild: HTMLImageElement =
+            cell.firstElementChild as HTMLImageElement;
+
+          if (
+            firstChild !== null &&
+            firstChild.src.includes("flag-solid.svg")
+          ) {
+            cell.innerHTML = "";
+            keys["remaining-flags"]++;
+            flagCount.innerHTML = keys["remaining-flags"].toString();
+          }
+        }
+      });
+
+      if (gameState[y][x] !== -1) {
+        for (let i = -1; i < 2; i++) {
+          for (let j = -1; j < 2; j++) {
+            if (
+              !(i === 0 && j === 0) &&
+              y + i > -1 &&
+              y + i < gameSize &&
+              x + j > -1 &&
+              x + j < gameSize &&
+              gameState[y + i][x + j] === -1
+            ) {
+              gameState[y][x]++;
+            }
+          }
+        }
+      } else {
+        cell.addEventListener("click", () => {
+          if (cell.innerHTML === "") {
+            cell.classList.add("open");
+            cell.innerHTML = "";
+
+            const bombImg: HTMLImageElement = document.createElement("img");
+            bombImg.src = "./assets/images/bomb-solid.svg";
+            bombImg.alt = "Bomb";
+            bombImg.style.height = "40px";
+            bombImg.style.width = "40px";
+            cell.appendChild(bombImg);
+          }
+        });
+      }
+    }
+  }
 }
 
 renderPage();
