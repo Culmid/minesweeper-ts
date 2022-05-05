@@ -22,6 +22,9 @@ const numberMap = {
 
 const currentTime: [number, number] = [0, 0];
 
+let minInterval: number;
+let secInterval: number;
+
 let gameState: number[][] = [];
 
 function renderPage() {
@@ -32,6 +35,7 @@ function renderPage() {
 
   const gameWrapper: HTMLDivElement = document.createElement("div");
   gameWrapper.classList.add("game-wrapper");
+  gameWrapper.id = "game-wrapper";
   pageWrapper.appendChild(gameWrapper);
 
   // HEADER
@@ -312,11 +316,11 @@ function resetGameContent() {
             if (keys["game-state"] === "ready") {
               keys["game-state"] = "playing";
 
-              setInterval(() => {
+              secInterval = setInterval(() => {
                 updateSec();
               }, 1000);
 
-              setInterval(() => {
+              minInterval = setInterval(() => {
                 updateMin();
               }, 60000);
             }
@@ -333,6 +337,11 @@ function resetGameContent() {
             bombImg.style.height = "80%";
             bombImg.style.width = "80%";
             cell.appendChild(bombImg);
+
+            banner("GAME OVER");
+
+            clearInterval(minInterval);
+            clearInterval(secInterval);
           }
         });
       }
@@ -366,6 +375,33 @@ function updateSec() {
   }
 
   sec.append((currentTime[0] % 60).toString());
+}
+
+function banner(text: string) {
+  const container: HTMLDivElement = document.createElement("div");
+  container.classList.add("banner-container");
+  document.getElementById("game-wrapper").appendChild(container);
+
+  const banner: HTMLDivElement = document.createElement("div");
+  banner.classList.add("banner");
+  banner.innerHTML = text;
+  container.appendChild(banner);
+
+  const restartButton: HTMLButtonElement = document.createElement("button");
+  restartButton.classList.add("restart");
+  container.appendChild(restartButton);
+
+  const restartImg: HTMLImageElement = document.createElement("img");
+  restartImg.classList.add("restart-img");
+  restartImg.src = "./assets/images/arrow-rotate-left-solid.svg";
+  restartImg.alt = "Restart";
+  restartImg.style.width = "50px";
+  restartImg.style.height = "50px";
+  restartButton.appendChild(restartImg);
+
+  restartButton.addEventListener("click", () => {
+    document.location.reload();
+  });
 }
 
 renderPage();
