@@ -2,6 +2,7 @@ let keys = {
   "active-size": "small",
   "active-theme": "spring",
   "remaining-flags": 25,
+  "game-state": "ready",
 };
 
 const translateSize = {
@@ -18,6 +19,8 @@ const numberMap = {
   5: "five",
   6: "six",
 };
+
+const currentTime: [number, number] = [0, 0];
 
 let gameState: number[][] = [];
 
@@ -304,6 +307,19 @@ function resetGameContent() {
               cell.classList.add(numberMap[gameState[y][x]]);
               cell.innerHTML = gameState[y][x].toString();
             }
+
+            // Start Timer
+            if (keys["game-state"] === "ready") {
+              keys["game-state"] = "playing";
+
+              setInterval(() => {
+                updateSec();
+              }, 1000);
+
+              setInterval(() => {
+                updateMin();
+              }, 60000);
+            }
           }
         });
       } else {
@@ -322,6 +338,34 @@ function resetGameContent() {
       }
     }
   }
+}
+
+function updateMin() {
+  const min: HTMLSpanElement = document.getElementById(
+    "min"
+  ) as HTMLSpanElement;
+  min.innerHTML = "";
+  currentTime[1]++;
+
+  if (currentTime[1] < 10) {
+    min.append("0");
+  }
+
+  min.append(currentTime[1].toString());
+}
+
+function updateSec() {
+  const sec: HTMLSpanElement = document.getElementById(
+    "sec"
+  ) as HTMLSpanElement;
+  sec.innerHTML = "";
+  currentTime[0]++;
+
+  if (currentTime[0] % 60 < 10) {
+    sec.append("0");
+  }
+
+  sec.append((currentTime[0] % 60).toString());
 }
 
 renderPage();
