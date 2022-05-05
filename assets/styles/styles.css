@@ -1,19 +1,7 @@
-:root {
-  --spring-dark: rgb(162, 209, 73);
-  --spring-light: rgb(170, 215, 81);
-  --summer-dark: rgb(255, 218, 0);
-  --summer-light: rgb(255, 232, 0);
-  --autumn-dark: rgb(197, 60, 9);
-  --autumn-light: rgb(250, 111, 4);
-  --winter-dark: rgb(35, 119, 164);
-  --winter-light: rgb(80, 163, 198);
-}
-
 body,
 html {
   margin: 0;
   height: 100vh;
-  background-color: blue;
   font-family: "Open Sans", sans-serif;
 }
 
@@ -37,7 +25,7 @@ html {
   background-color: #4a752c;
   height: 100px;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   padding: 10px;
   box-sizing: border-box;
@@ -45,6 +33,7 @@ html {
 
 .game-header-dropdown {
   position: relative;
+  z-index: 1;
 }
 
 .game-header-dropdown-button {
@@ -118,9 +107,28 @@ html {
 
 /* Game Content */
 .game-content {
-  background-color: aquamarine;
   display: flex;
   flex-direction: column;
+}
+
+.game-content[theme="spring"] {
+  --cell-dark: rgb(162, 209, 73);
+  --cell-light: rgb(170, 215, 81);
+}
+
+.game-content[theme="summer"] {
+  --cell-dark: rgb(255, 218, 0);
+  --cell-light: rgb(255, 232, 0);
+}
+
+.game-content[theme="autumn"] {
+  --cell-dark: rgb(197, 60, 9);
+  --cell-light: rgb(250, 111, 4);
+}
+
+.game-content[theme="winter"] {
+  --cell-dark: rgb(35, 119, 164);
+  --cell-light: rgb(80, 163, 198);
 }
 
 .game-row {
@@ -130,7 +138,6 @@ html {
 .game-cell {
   height: 50px;
   width: 50px;
-  background-color: var(--spring-dark);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -138,9 +145,13 @@ html {
   font-size: 30px;
 }
 
+.game-cell {
+  background-color: var(--cell-dark);
+}
+
 .game-row:nth-of-type(odd) .game-cell:nth-of-type(odd),
 .game-row:nth-of-type(even) .game-cell:nth-of-type(even) {
-  background-color: var(--spring-light);
+  background-color: var(--cell-light);
 }
 
 .game-cell.open {
